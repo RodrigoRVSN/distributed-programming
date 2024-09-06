@@ -33,6 +33,10 @@ if args.server:
       @server.register_function()
       def fn_div(a, b):
         return a / b;
+    
+      @server.register_function()
+      def fn_add_array(arr):
+          return sum(arr)
 
       try:
         server.serve_forever()
@@ -41,25 +45,50 @@ if args.server:
 
 else:
     print(f"Conectado a http://{Address}:{Port}")
-    with xmlrpc.client.ServerProxy(f'http://{Address}:{Port}') as proxy:
-      # Multicall
-        multicall = xmlrpc.client.MultiCall(proxy)
-        multicall.fn_add(2, 3)
-        multicall.fn_mul(5, 5)
-        multicall.fn_sub(7, 2)
-        multicall.fn_div(40, 8)
+    with xmlrpc.client.ServerProxy(f'http://{Address}:{Port}', verbose=True) as proxy:
 
-        print("Resultados da chamada multicall:")
-        for result in multicall():
-            print(result)
+      # Soma com inteiros
+      print("\nSoma com inteiros:")
+      result = proxy.fn_add(5, 3)
+      print(f"Resultado: {result}")
 
-        # Chamada simples
-        print("\nResultados da chamada simples:")
-        a = proxy.fn_add(2, 3)
-        print(f"a = {a}")
-        b = proxy.fn_mul(a, 2)
-        print(f"b = {b}")
-        c = proxy.fn_sub(b, 5)
-        print(f"c = {c}")
-        d = proxy.fn_div(a, c)
-        print(f"d = {d}")
+      # Soma com ponto flutuante
+      print("\nSoma com ponto flutuante:")
+      result = proxy.fn_add(3.14, 2.86)
+      print(f"Resultado: {result}")
+
+      # Soma com arrays
+      print("\nSoma com arrays:")
+      result = proxy.fn_add_array([1, 2, 3, 4, 5])
+      print(f"Resultado: {result}")
+
+      # # Multicall
+      # multicall = xmlrpc.client.MultiCall(proxy)
+      # multicall.fn_add(2, 3)
+      # multicall.fn_div(30, 8)
+
+      # print("Resultados da chamada multicall:")
+      # for result in multicall():
+      #     print(result)
+
+      # # Multicall
+      # multicall = xmlrpc.client.MultiCall(proxy)
+      # multicall.fn_add(2, 3)
+      # multicall.fn_mul(5, 5)
+      # multicall.fn_sub(7, 2)
+      # multicall.fn_div(40, 8)
+
+      # print("Resultados da chamada multicall:")
+      # for result in multicall():
+      #     print(result)
+
+      # # Chamada simples
+      # print("\nResultados da chamada simples:")
+      # a = proxy.fn_add(2, 3)
+      # print(f"a = {a}")
+      # b = proxy.fn_mul(a, 2)
+      # print(f"b = {b}")
+      # c = proxy.fn_sub(b, 5)
+      # print(f"c = {c}")
+      # d = proxy.fn_div(a, c)
+      # print(f"d = {d}")
