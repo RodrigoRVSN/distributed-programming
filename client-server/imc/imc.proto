@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message CalcIMCRequest {
+  string nome  = 1;
+  double peso = 2;
+  double altura = 3;
+}
+
+message CalcIMCResponse {
+  string aviso = 1;
+  double imc = 2;
+}
+
+service IMC {
+  rpc CalcIMC (CalcIMCRequest) returns (CalcIMCResponse) {}
+}
